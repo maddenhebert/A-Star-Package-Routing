@@ -1,3 +1,4 @@
+# package object used to store package data
 class Package:
     def __init__ (self, package_id, address, city, state, zip_code, deadline, weight, special_notes):
         self.package_id = package_id

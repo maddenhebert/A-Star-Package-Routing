@@ -1,7 +1,8 @@
+# manual hash table creation for package storage, retrieval and updating 
 class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity 
-        self.table = [] * capacity
+        self.table = [[] for _ in range(capacity)]
 
     # hash function, simple modulo of key with capacity
     def hash(self, key):
