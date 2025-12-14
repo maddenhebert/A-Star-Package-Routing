@@ -4,6 +4,7 @@ import objects.package as p
 import datetime as dt
 import objects.truck as t
 import routing 
+import package_statuses as ps
 
 # DSA II - WGUPS Routing Program 
 #Student ID: 012600680
@@ -90,22 +91,100 @@ truck3 = t.truck(3, departure3, TruckLoad3)
 # shortest time between trucks will be continued by truck 3
 routing.nearest_neighbor(truck3, distance_matrix, address_dict, event_log, packages_table)
 
+# total mileage calculation
+total_mileage = truck1.mileage + truck2.mileage + truck3.mileage
+
 # sort event log by time 
 event_log.sort(key = lambda x: x["time"])
 
-# formats and prints all events in order with time and truck
-for event in event_log:
-    print(f"Truck {event['truck_id']} has delivered package {event['package_id']} at {event['time']} with {event['mileage']} miles.")
+# USER INTERFACE 
+program = True
+while program == True:
+    print('''\n   WGUPS Routing Program
+    1) View Entire Delivery Log
+    2) View Total Mileage
+    3) View Package Statuses by Time
+    4) Exit Program
+    Input desired option below:\n'''
+    )
 
+    user_input = input().strip()
 
+    # filters output based on user input 
+    if user_input == "1":
+        # formats and prints all events in order with time and truck
+        print("Delivery Log:")
+        for event in event_log:
+            print(f"Truck {event['truck_id']} has delivered package {event['package_id']} at {event['time']} with {event['mileage']} miles.")
+        print("\nWould you like to return to the interface? (y/n)")
+        choice = input().lower().strip()
+        if choice != 'y':
+            program = False
+            print("\nExiting Program")
 
-    
+    # displays total mileage
+    elif user_input == "2":
+        print(f"\nTotal mileage for all trucks is: {total_mileage} miles.")
+        print("\nWould you like to return to the interface? (y/n)")
+        choice = input().lower().strip()
+        if choice != 'y':
+            program = False
+            print("\nExiting Program")
 
+    # gives statuses of all packages at a certain time 
+    elif user_input == "3":
+        while True:
+            print("\nEnter a time in HH::MM format (24 hour clock):\n")
+            selected_time = input()
 
+            # input validation for datetime
+            try:
+                selected_time = dt.datetime.strptime(selected_time, "%H:%M")
+                selected_time = selected_time.replace(year=2023, month=1, day=1)
+                break
 
+            except ValueError:
+                print("\nInvalid Time Format, enter time in HH:MM.\n")
 
-    
+        # functioin to get statuses at a given time 
+        statuses = ps.package_statuses(packages_table, selected_time, event_log, truck1, truck2, truck3)
 
-    
+        # holds value for total mileage
+        total_mileage = 0
+        largest_mileage = {}
+
+        # loop to take largest mileage from each truck before a given time
+        for event in event_log:
+            if event["time"] <= selected_time:
+                truck_id = event["truck_id"]
+                mileage = event["mileage"]
+
+                # 
+                if truck_id not in largest_mileage or mileage > largest_mileage[truck_id]:
+                    largest_mileage[truck_id] = mileage
+            
+        # adds all of the largest mileages 
+        for i in range(1,4):
+            total_mileage += largest_mileage.get(i, 0) 
+
+        # prints all status messages
+        print(f"\nPackage statuses at {selected_time}:\n")
+        for status_message in statuses:
+            print(statuses[status_message])
+        
+        # prints total mileage
+        print(f"Total Mileage at this time: {total_mileage}")
+
+        # return prompt 
+        print("\nWould you like to return to the interface? (y/n)")
+        choice = input().lower().strip()
+        if choice != 'y':
+            program = False
+            print("\nExiting Program")
+            
+    # exists program
+    elif user_input == "4": 
+        program = False
+        print("\nExiting Program")
 
 

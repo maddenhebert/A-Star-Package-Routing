@@ -3,6 +3,7 @@
 
 import datetime as dt
 
+# function for getting distance between two addresses
 def get_distance(package_address, current_address, distance_matrix, address_dict):
     destination_index = address_dict[package_address]
     current_index = address_dict[current_address]
@@ -25,8 +26,8 @@ def nearest_neighbor(truck, distance_matrix, address_dict, event_log, packages_t
         next_address = None
 
         # loop for finding package with shortest distance to address 
-        for package in truck.packages:
-            package = packages_table.lookup(package)
+        for package_id in truck.packages:
+            package = packages_table.lookup(package_id)
             package_address = package.address
             distance = get_distance(package_address, current_address, distance_matrix, address_dict)
 
@@ -66,9 +67,10 @@ def nearest_neighbor(truck, distance_matrix, address_dict, event_log, packages_t
                 "truck_id" : truck.truck_id,
                 "time" : truck.time,
                 "mileage" : truck.mileage,
-                "package_id" : package.package_id
+                "package_id" : package.package_id,
+                "status" : package.status 
             })
 
-    # print when truck is finished
-    print(f"Truck {truck.truck_id} has completed deliveries at {truck.time} with total mileage of {truck.mileage} miles.")
-    return truck.time
+    ''' print when truck is finished (removed for UI purposes) 
+    print(f"Truck {truck.truck_id} has completed deliveries at {truck.time} with total mileage of {truck.mileage} miles.")'''
+    return truck.time 
