@@ -147,7 +147,7 @@ while program == True:
                 print("\nInvalid Time Format, enter time in HH:MM.\n")
 
         # functioin to get statuses at a given time 
-        statuses = ps.package_statuses(packages_table, selected_time, event_log, truck1, truck2, truck3)
+        statuses = ps.package_statuses(packages_table, selected_time, event_log, truck1, truck2, truck3, packages_table)
 
         # holds value for total mileage
         total_mileage = 0
@@ -167,8 +167,11 @@ while program == True:
         for i in range(1,4):
             total_mileage += largest_mileage.get(i, 0) 
 
+        # formats selected time 
+        time_str = selected_time.strftime("%H:%M")
+
         # prints all status messages
-        print(f"\nPackage statuses at {selected_time}:\n")
+        print(f"\nPackage statuses at {time_str}:\n")
         for status_message in statuses:
             print(statuses[status_message])
         
@@ -186,5 +189,3 @@ while program == True:
     elif user_input == "4": 
         program = False
         print("\nExiting Program")
-
-
