@@ -15,7 +15,7 @@ import logistics.total_mileage as tm
 packages_table = ht.hash_table(40)
 
 # opens csv file with package data
-with open("wgups/csv/packages.csv") as packages:
+with open("./csv/packages.csv") as packages:
     reader = csv.reader(packages) 
 
     # for each row, data is stored in variables and a package is made 
@@ -34,7 +34,7 @@ with open("wgups/csv/packages.csv") as packages:
         packages_table.insert(package_id, package)
         
 # address to index for distance lookup, read from csv file  
-with open('wgups/csv/addresses.csv') as addresses:
+with open('./csv/addresses.csv') as addresses:
     reader = csv.reader(addresses)
 
     address_dict = {}
@@ -45,7 +45,7 @@ with open('wgups/csv/addresses.csv') as addresses:
         index += 1
 
 # opens csv file with distance data
-with open('wgups/csv/distances.csv') as distances:
+with open('./csv/distances.csv') as distances:
     reader = csv.reader(distances)
 
     # 2d list used for distance lookups 
